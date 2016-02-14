@@ -248,6 +248,35 @@
 		</div>
 		<script src="js/ui.js"></script>
 		<script src="js/orient.js"></script>
+		<div id="demo-toast-example" class="mdl-js-snackbar mdl-snackbar">
+			<div class="mdl-snackbar__text"></div>
+			<button class="mdl-snackbar__action" type="button"></button>
+		</div>
 </body>
+<script>
+	var notification = document.querySelector('.mdl-js-snackbar');
+	navigator.serviceWorker.register('/sw.js').then(function(reg) {
+		if (!reg.installing) return;
+		console.log("There is a ServiceWorker installing");
+
+		var worker = reg.installing;
+		worker.addEventListener('statechange', function() {
+			if (worker.state == 'redundant') {
+				console.log('Install failed');
+
+				notification.MaterialSnackbar.showSnackbar({
+					message: 'Offline install Failed:ServiceWorker not supported by browser'
+				});
+			}
+			if (worker.state == 'installed') {
+				notification.MaterialSnackbar.showSnackbar({
+					message: 'SvgNet Ready For Offline Use'
+				});
+
+			}
+		});
+	});
+
+</script>
 
 </html>
