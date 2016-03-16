@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta name="viewport" content="initial-scale=1.0">
+	<meta charset="utf-8">
+
+	<style>
+		html,
+		body {
+			height: 100%;
+			margin: 0;
+			padding: 0;
+		}
+
+		#googleMap {
+			height: 100%;
+		}
+
+	</style>
+	<script>
+		function initialize() {
+			var mapDiv = document.getElementById('googleMap');
+			var map = new google.maps.Map(mapDiv, {
+				mapTypeId: google.maps.MapTypeId.TERRAIN,
+				scaleControl: true
+			});
+
+			var southWest = new google.maps.LatLng(26, 74.3333333);
+			var northEast = new google.maps.LatLng(26.0833333, 74.4166667);
+			var bounds = new google.maps.LatLngBounds(southWest, northEast);
+			map.fitBounds(bounds);
+
+
+
+			var myLatLng = [];
+			myLatLng.push({
+				lat: 26,
+				lng: 74.3333333
+			});
+
+			myLatLng.push({
+				lat: 26.0833333,
+				lng: 74.4166667
+			});
+
+			var markerSW = new google.maps.Marker({
+				position: myLatLng[0],
+				map: map,
+				title: 'Hello W'
+			});
+
+			var markerNE = new google.maps.Marker({
+				position: myLatLng[1],
+				map: map,
+				title: 'Hello World!'
+			});
+
+		}
+
+		function loadScript() {
+			var script = document.createElement("script");
+			script.type = "text/javascript";
+			script.src = "http://maps.googleapis.com/maps/api/js?key=&sensor=false&callback=initialize";
+			document.body.appendChild(script);
+		}
+
+		window.onload = loadScript;
+
+	</script>
+</head>
+	<!--
+<script src="html2canvas.js"></script>
+<script>
+	function saveMapToDataUrl() {
+
+		var element = document.getElementById("googleMap");
+
+		html2canvas(element, {
+			useCORS: true,
+			onrendered: function(canvas) {
+				var dataUrl = canvas.toDataURL("image/png");
+
+				// DO SOMETHING WITH THE DATAURL
+				// Eg. write it to the page
+				document.body.appendChild(canvas);
+			}
+		});
+	}
+
+</script>-->
+
+<body>
+	<div id="googleMap"></div>
+
+</body>
+
+</html>

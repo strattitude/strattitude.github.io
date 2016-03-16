@@ -113,7 +113,7 @@ function getOrienation() {
 			deviceOrientationHandler(alpha, beta, gamma);
 		}, false);
 	} else {
-	//	document.getElementById("doEvent").innerHTML = "Not supported on your device or browser.  Sorry."
+		//	document.getElementById("doEvent").innerHTML = "Not supported on your device or browser.  Sorry."
 	}
 }
 
@@ -126,11 +126,44 @@ function todeg(radians) {
 	return radians * 180 / Math.PI;
 }
 
+function compassHeading(alpha, beta, gamma) {
+
+	var _x = beta ? torad(beta) : 0; // beta value
+	var _y = gamma ? torad(gamma) : 0; // gamma value
+	var _z = alpha ? torad(alpha) : 0; // alpha value
+
+	var cX = Math.cos(_x);
+	var cY = Math.cos(_y);
+	var cZ = Math.cos(_z);
+	var sX = Math.sin(_x);
+	var sY = Math.sin(_y);
+	var sZ = Math.sin(_z);
+
+	// Calculate Vx and Vy components
+	var Vx = -cZ * sY - sZ * sX * cY;
+	var Vy = -sZ * sY + cZ * sX * cY;
+
+	// Calculate compass heading
+	var compassHeading = Math.atan(Vx / Vy);
+
+	// Convert compass heading to use whole unit circle
+	if (Vy < 0) {
+		compassHeading += Math.PI;
+	} else if (Vx < 0) {
+		compassHeading += 2 * Math.PI;
+	}
+
+	return compassHeading * (180 / Math.PI); // Compass Heading (in degrees)
+
+}
+
 function deviceOrientationHandler(alpha, beta, gamma) {
-	var dip = Math.round(Math.sqrt (Math.pow(beta, 2) + Math.pow(gamma, 2))),
+
+
+	var dip = Math.round(Math.sqrt(Math.pow(beta, 2) + Math.pow(gamma, 2))),
 		plunge = Math.round(dip),
-		strike = Math.round(alpha + 90),
-		trend = Math.round(alpha);
+		strike = Math.round(compassHeading(alpha, beta, gamma)),
+		trend = strike + 90 > 360 ? strike + 90 - 360 : strike + 90;
 	document.getElementById("strike").parentNode.classList.add("is-dirty");
 	document.getElementById("strike").value = strike;
 	document.getElementById("dip").parentNode.classList.add("is-dirty");
