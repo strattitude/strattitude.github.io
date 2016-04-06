@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta name="viewport" content="initial-scale=1.0">
+	<meta charset="utf-8">
+
+	<style>
+		html,
+		body {
+			width: 4100px;
+			height: 2800px;
+			margin: 0;
+			padding: 0;
+		}
+
+		#googleMap {
+			height: 100%;
+		}
+
+		svg text{
+			font-family: serif;
+			font-weight: bold;
+			font-size: 30px
+		}
+
+	</style>
+	<script>
+
+var locData={
+  "C1": { "lat":26.00778, "long":74.38298, "trend":225},
+  "C3": { "lat":26.0096666667, "long":74.3781666667, "trend":210},
+  "C4": { "lat":26.01, "long":74.3771666667, "trend":210},
+  "C5": { "lat":26.0105, "long":74.3786666667, "trend":210},
+  "C6": { "lat":26.0136666667, "long":74.375, "trend":200},
+  "C7": { "lat":26.01371, "long":74.38173, "trend":43},
+  "C8": { "lat":26.01435667, "long":74.39472, "trend":24},
+  "C9": { "lat":26.01464, "long":74.3927, "trend":195},
+  "C10": { "lat":26.015, "long":74.39, "trend":210},
+  "C11": { "lat":26.01501, "long":74.38216, "trend":42},
+  "C12": { "lat":26.01589, "long":74.39383, "trend":195},
+  "C13": { "lat":26.01628, "long":74.39141833, "trend":23},
+  "C14": { "lat":26.0168333333, "long":74.3726666667, "trend":205},
+  "C15": { "lat":26.01715, "long":74.35429, "trend":60},
+  "C16": { "lat":26.01777778, "long":74.39194444, "trend":20},
+  "C17": { "lat":26.017778, "long":74.391944, "trend":25},
+  "C18": { "lat":26.019722, "long":74.3925, "trend":24},
+  "C19": { "lat":26.020278, "long":74.393056, "trend":25},
+  "C20": { "lat":26.021111, "long":75.392222, "trend":26},
+  "C21": { "lat":26.02156333, "long":74.38599, "trend":25},
+  "C22": { "lat":26.023333, "long":74.3925, "trend":25},
+  "C23": { "lat":26.02498167, "long":74.39022167, "trend":25},
+
+  "C25": { "lat":26.025, "long":74.39111111, "trend":22},
+  "C26": { "lat":26.025278, "long":74.375278, "trend":25},
+  "C27": { "lat":26.025333, "long":74.370083, "trend":208},
+  "C28": { "lat":26.0255, "long":74.370722, "trend":215},
+  "C29": { "lat":26.0255, "long":74.368, "trend":208},
+  "C30": { "lat":26.0266666667, "long":74.365, "trend":210},
+  "C31": { "lat":26.02703833, "long":74.39112333, "trend":220},
+  "C32": { "lat":26.027111, "long":74.373, "trend":205},
+  "C33": { "lat":26.027222, "long":74.376667, "trend":25},
+  "C34": { "lat":26.028333, "long":74.377222, "trend":25},
+  "C35": { "lat":26.029444, "long":74.362778, "trend":215},
+  "C36": { "lat":26.033171, "long":74.365481, "trend":208},
+  "C37": { "lat":26.033702, "long":74.365952, "trend":210},
+  "C38": { "lat":26.034139, "long":74.375639, "trend":205},
+  "C39": { "lat":26.036111, "long":74.359167, "trend":274},
+  "C40": { "lat":26.037222, "long":74.381944, "trend":33},
+  "C41": { "lat":26.037778, "long":74.416111, "trend":33},
+  "C42": { "lat":26.039444, "long":74.381389, "trend":24},
+  "C43": { "lat":26.040556, "long":74.384444, "trend":32},
+  "C44": { "lat":26.040833, "long":74.381389, "trend":35},
+  "C45": { "lat":26.041389, "long":74.385556, "trend":32},
+  "C46": { "lat":26.045556, "long":74.344167, "trend":75}
+}
+	</script>
+	<script>
+		var styleArray = [{
+			featureType: "road",
+			elementType: "geometry",
+			stylers: [{
+				color: "#c34747"
+			}, {
+				saturation: 0
+			}]
+		}];
+		var map;
+		var grid;
+		var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+		var labelIndex = 0;
+
+		function initialize() {
+			var mapDiv = document.getElementById('googleMap');
+			map = new google.maps.Map(mapDiv, {
+				mapTypeId: google.maps.MapTypeId.TERRAIN,
+				zoomControl: false,
+				mapTypeControl: false,
+				scaleControl: true,
+				streetViewControl: false,
+				rotateControl: false,
+				fullscreenControl: false,
+
+				zoom: 15,
+			});
+
+			var southWest = new google.maps.LatLng(26, 74.3333333);
+			var northEast = new google.maps.LatLng(26.052, 74.4166667);
+			var bounds = new google.maps.LatLngBounds(southWest, northEast);
+			map.fitBounds(bounds);
+			//map.panToBounds(bounds);
+			var rectangle = new google.maps.Rectangle({
+				bounds: bounds,
+				map: map,
+				fillOpacity: 0,
+				strokeOpacity: 1,
+				strokeWeight: 4
+			});
+
+
+			for (var x in locData) {
+				var locPos = new google.maps.LatLng(locData[x].lat, locData[x].long);
+				var div = document.createElement('DIV');
+				div.innerHTML = '<svg width="400" height="400" xmlns="http://www.w3.org/2000/svg" version="1.1"> <g id="bedsym" transform="rotate('+locData[x].trend +' 200 200)"> <line x1="200" y1="0" x2="200" y2="400" stroke-width="3" stroke="#000"></line> </g><text x="200" y="240" fill="#000" id="dipamt">'+x+'</text> </svg>';
+				var locMarker = new RichMarker({
+					position: locPos,
+					map: map,
+					flat: true,
+					draggable: false,
+					anchor: RichMarkerPosition.MIDDLE,
+					content: div
+				});
+
+
+
+
+			}
+
+			//grid = new Graticule(map, true);
+
+		}
+
+	</script>
+</head>
+
+
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+<script type="text/javascript" src="richmarker.js"></script>
+<script src="html2canvas.js"></script>
+
+<script src="v3_ll_grat.js"></script>
+<script>
+	function saveMapToDataUrl() {
+
+		var element = document.getElementById("googleMap");
+
+		html2canvas(element, {
+			useCORS: true,
+			onrendered: function(canvas) {
+				var dataUrl = canvas.toDataURL("image/png");
+
+				// DO SOMETHING WITH THE DATAURL
+				// Eg. write it to the page
+				document.body.appendChild(canvas);
+			}
+		});
+	}
+
+</script>
+
+<body onload="initialize()">
+	<div id="googleMap"></div>
+	<button onclick="saveMapToDataUrl()">print</button>
+	<button onclick="alert(map.getZoom());">Get Zoom</button>
+</body>
+
+</html>

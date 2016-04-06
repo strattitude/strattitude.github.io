@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta name="viewport" content="initial-scale=1.0">
+	<meta charset="utf-8">
+
+	<style>
+		html,
+		body {
+			width: 4100px;
+			height: 2800px;
+			/*width: 100%;
+			height: 100%;/* */
+			margin: 0;
+			padding: 0;
+		}
+
+		#googleMap {
+			height: 100%;
+		}
+
+		.my-other-marker {
+			font-family: serif;
+			font-weight: bold;
+			font-size: 35px
+		}
+
+	</style>
+	<script>
+		locData ={
+  "1": { "lat":26.00778, "long":74.38298},
+  "2": { "lat":26.0108333333, "long":74.3756666667},
+  "3": { "lat":26.01371, "long":74.38173},
+  "4": { "lat":26.01403, "long":74.39163},
+  "5": { "lat":26.014245, "long":74.39355333},
+  "6": { "lat":26.01455, "long":74.391335},
+  "7": { "lat":26.01464, "long":74.39125667},
+  "8": { "lat":26.01468167, "long":74.39125333},
+  "9": { "lat":26.015, "long":74.39},
+  "10": { "lat":26.01589, "long":74.39383},
+  "11": { "lat":26.017778, "long":74.358889},
+  "12": { "lat":26.017778, "long":74.358889},
+  "13": { "lat":26.019722, "long":74.3925},
+  "14": { "lat":26.020278, "long":74.393056},
+  "15": { "lat":26.022778, "long":74.368333},
+  "16": { "lat":26.023889, "long":74.368889},
+  "17": { "lat":26.02409833, "long":74.36869333},
+  "18": { "lat":26.024135998, "long":74.368673334},
+  "19": { "lat":26.02414, "long":74.36877167},
+  "20": { "lat":26.02414167, "long":74.36878167},
+  "21": { "lat":26.02414333, "long":74.369135},
+  "22": { "lat":26.0243333333, "long":74.3691666667},
+  "23": { "lat":26.02441667, "long":74.36628667},
+  "24": { "lat":26.02447333, "long":74.36618},
+  "25": { "lat":26.024722, "long":74.390833},
+  "26": { "lat":26.025, "long":74.391111},
+  "27": { "lat":26.025025, "long":74.39029667},
+  "28": { "lat":26.0255, "long":74.370722},
+  "29": { "lat":26.0263333333, "long":74.3666666667},
+  "30": { "lat":26.02639667, "long":74.364785},
+  "31": { "lat":26.02646667, "long":74.36498667},
+  "32": { "lat":26.02890833, "long":74.36468333},
+  "33": { "lat":26.0291666667, "long":74.3646666667},
+  "34": { "lat":26.02971167, "long":74.36274},
+  "35": { "lat":26.03011167, "long":74.36257333},
+  "36": { "lat":26.030125, "long":74.362615},
+  "37": { "lat":26.03014, "long":74.36248833},
+  "38": { "lat":26.030556, "long":74.362778},
+  "39": { "lat":26.0313333333, "long":74.3628333333},
+  "40": { "lat":26.031389, "long":74.3625},
+  "41": { "lat":26.031389, "long":74.3625},
+  "42": { "lat":26.03223667, "long":74.38016167},
+  "43": { "lat":26.03230833, "long":74.38916833},
+  "44": { "lat":26.033, "long":74.3605},
+  "45": { "lat":26.03369167, "long":74.35937667},
+  "46": { "lat":26.03416667, "long":74.38764333},
+  "47": { "lat":26.03419167, "long":74.38765167},
+  "48": { "lat":26.03419333, "long":74.38765},
+  "49": { "lat":26.03420167, "long":74.387635},
+  "50": { "lat":26.03421833, "long":74.38767167},
+  "51": { "lat":26.03423, "long":74.38771833},
+  "52": { "lat":26.036111, "long":74.359167},
+  "53": { "lat":26.039444, "long":74.381389},
+  "54": { "lat":26.045556, "long":74.344167},
+  "55": { "lat":26.046111, "long":74.344722},
+  "56": { "lat":26.046111, "long":74.344722},
+  "57": { "lat":74.362778, "long":74.362778},
+  "66": { "lat":74.364167, "long":74.364167}
+}
+
+	</script>
+	<script>
+		var styleArray = [{
+			featureType: "road",
+			elementType: "geometry",
+			stylers: [{
+				color: "#c34747"
+			}, {
+				saturation: 0
+			}]
+		}];
+		var map;
+		var grid;
+		var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+		var labelIndex = 0;
+
+		function initialize() {
+			var mapDiv = document.getElementById('googleMap');
+			map = new google.maps.Map(mapDiv, {
+				mapTypeId: google.maps.MapTypeId.TERRAIN,
+				zoomControl: true,
+				mapTypeControl: true,
+				scaleControl: true,
+				streetViewControl: false,
+				rotateControl: false,
+				fullscreenControl: true,
+
+				zoom: 15,
+			});
+
+			var southWest = new google.maps.LatLng(26, 74.3333333);
+			var northEast = new google.maps.LatLng(26.052, 74.4166667);
+			var bounds = new google.maps.LatLngBounds(southWest, northEast);
+			map.fitBounds(bounds);
+			//map.panToBounds(bounds);
+			var rectangle = new google.maps.Rectangle({
+				bounds: bounds,
+				map: map,
+				fillOpacity: 0,
+				strokeOpacity: 1,
+				strokeWeight: 4
+			});
+
+
+			for (var x in locData) {
+
+				var locPos = new google.maps.LatLng(locData[x].lat, locData[x].long);
+				var div = document.createElement('DIV');
+				div.innerHTML = '<div class="my-other-marker">' + x + '</div>';
+
+				var PosLab=RichMarkerPosition.TOP;
+				if (x=="133"||x=="135"||x=="132"||x=="14"||x=="18"||x=="44"||x=="74")PosLab=RichMarkerPosition.BOTTOM;
+				if (x=="52")PosLab=RichMarkerPosition.BOTTOM_LEFT;
+				if (x=="90")PosLab=RichMarkerPosition.TOP_LEFT;
+				//if (x=="35")PosLab=RichMarkerPosition.T;
+				if (x=="131")PosLab=RichMarkerPosition.BOTTOM_RIGHT;
+				if (x=="60"||x=="134")PosLab=RichMarkerPosition.LEFT;
+
+				if (x=="50"||x=="35"||x=="88")PosLab=RichMarkerPosition.RIGHT;
+
+				var locMarker = new RichMarker({
+					position: locPos,
+					map: map,
+					flat: true,
+					draggable: false,
+					anchor: PosLab,
+					content: div
+				});
+
+				var marker = new google.maps.Marker({
+					position: locPos,
+					icon: {
+						path: google.maps.SymbolPath.CIRCLE,
+						fillOpacity: 1,
+						scale: 3
+					},
+					draggable: true,
+					map: map
+				});
+				/*var Circle = new google.maps.Circle({
+					strokeColor: '#00000',
+					strokeOpacity: 0,
+					strokeWeight: 0,
+					fillColor: '#00000',
+					fillOpacity: 1,
+					map: map,
+					center: locPos,
+					radius: 10
+				});*/
+
+
+
+			}
+			var mc = new MarkerClusterer(map);
+			//grid = new Graticule(map, true);
+
+		}
+
+	</script>
+</head>
+
+
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+<script type="text/javascript" src="richmarker.js"></script>
+<script src="html2canvas.js"></script>
+<script src="markerclusterer_compiled.js"></script>
+<script src="v3_ll_grat.js"></script>
+<script>
+	function saveMapToDataUrl() {
+
+		var element = document.getElementById("googleMap");
+
+		html2canvas(element, {
+			useCORS: true,
+			onrendered: function(canvas) {
+				var dataUrl = canvas.toDataURL("image/png");
+
+				// DO SOMETHING WITH THE DATAURL
+				// Eg. write it to the page
+				document.body.appendChild(canvas);
+			}
+		});
+	}
+
+</script>
+
+<body onload="initialize()">
+	<div id="googleMap"></div>
+	<button onclick="saveMapToDataUrl()">print</button>
+	<button onclick="alert(map.getZoom());">Get Zoom</button>
+</body>
+
+</html>
