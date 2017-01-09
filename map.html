@@ -22,39 +22,20 @@
 	<script>
 		function initialize() {
 			var mapDiv = document.getElementById('googleMap');
+			var centerMap= new google.maps.LatLng(21.4568812,87.0548295)
+			
 			var map = new google.maps.Map(mapDiv, {
 				mapTypeId: google.maps.MapTypeId.TERRAIN,
-				scaleControl: true
+				scaleControl: true,
+				center:center
 			});
+			//var southWest = new google.maps.LatLng(26, 74.3333333);
+			//var northEast = new google.maps.LatLng(26.0833333, 74.4166667);
+			//var bounds = new google.maps.LatLngBounds(southWest, northEast);
+			//map.fitBounds(bounds);
 
-			var southWest = new google.maps.LatLng(26, 74.3333333);
-			var northEast = new google.maps.LatLng(26.0833333, 74.4166667);
-			var bounds = new google.maps.LatLngBounds(southWest, northEast);
-			map.fitBounds(bounds);
 
-
-			var myLatLng = [];
-			myLatLng.push({
-				lat: 26,
-				lng: 74.3333333
-			});
-
-			myLatLng.push({
-				lat: 26.0833333,
-				lng: 74.4166667
-			});
-
-			var markerSW = new google.maps.Marker({
-				position: myLatLng[0],
-				map: map,
-				title: 'Hello W'
-			});
-
-			var markerNE = new google.maps.Marker({
-				position: myLatLng[1],
-				map: map,
-				title: 'Hello World!'
-			});
+			
 
 		}
 
